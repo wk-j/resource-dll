@@ -11,15 +11,11 @@ namespace ResourceDll {
         [DllImport("Print.so", EntryPoint = "print")]
         private static extern void Print(string message);
 
-        private static Stream ReadResource() {
-            var assembly = Assembly.GetExecutingAssembly();
-            var location = assembly.Location;
-            var resourceStream = assembly.GetManifestResourceStream("ResourceDll.Print.so");
-            return resourceStream;
-        }
+        private static Stream ReadResource(string fileName) =>
+            Assembly.GetExecutingAssembly().GetManifestResourceStream($"ResourceDll.{fileName}");
 
         static void Main(string[] args) {
-            var stream = ReadResource();
+            var stream = ReadResource("Print.so");
             using (var file = new FileStream("Print.so", FileMode.OpenOrCreate)) {
                 stream.CopyTo(file);
             }
